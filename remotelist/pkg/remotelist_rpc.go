@@ -9,7 +9,6 @@ import (
 )
 
 type RemoteList struct {
-	//mu   sync.Mutex
 	list []int
 	size uint32
 }
@@ -29,7 +28,7 @@ func (m *RemoteMap) Append(args *struct {
 	defer m.mu.Unlock()
 	l, ok := m.Map[args.List_id]
 	if !ok {
-		l = &RemoteList{} //new(RemoteList) //&RemoteList{}
+		l = &RemoteList{}
 		m.Map[args.List_id] = l
 	}
 	fmt.Println("Exibindo lista de nome:", args.List_id)
