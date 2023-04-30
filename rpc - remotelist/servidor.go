@@ -130,8 +130,40 @@ func (s *Server) Size(listName string, reply *int) error {
 		return fmt.Errorf("Lista não encontrada")
 	}
 
+	// Garante que apenas um cliente por vez esteja realizando operações na lista
+	list.Lock.Lock()
+	defer list.Lock.Unlock()
+
 	// Retorna o tamanho da lista
 	*reply = len(list.Values)
+	return nil
+}
+
+// Método para retornar o valor de um determinado índice de uma lista
+func (s *Server) Get(args []string, reply *int) error {
+	listName := args[0]
+	index, err := strconv.Atoi(args[1])
+	if err != nil {
+		return err
+	}
+
+	// Verifica se a lista já existe
+	list, ok := lists[listName]
+	if !ok {
+		return fmt.Errorf("Lista %s não encontrada", listName)
+	}
+
+	// Garante que apenas um cliente por vez esteja realizando operações na lista
+	list.Lock.Lock()
+	defer list.Lock.Unlock()
+
+	// Verifica se o índice está dentro do range da lista
+	if index < 0 || index >= len(list.Values) {
+		return fmt.Errorf("Índice %d inválido para a lista %s", index, listName)
+	}
+
+	// Retorna o valor do índice
+	*reply = list.Values[index]
 	return nil
 }
 

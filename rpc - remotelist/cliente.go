@@ -114,9 +114,9 @@ func main() {
 
 			// Chama o método Get do servidor para consultar o índice
 			var value int
-			client.Call("Server.Get", []string{listName, index}, &value)
+			err = client.Call("Server.Get", []string{listName, index}, &value)
 			if err != nil {
-				fmt.Println("Erro ao buscar índice na lista: ", err)
+				fmt.Println("Erro ao buscar item na lista: ", err)
 			} else {
 				fmt.Printf("Valor do item buscado na lista %s: %d\n", listName, value)
 			}
@@ -133,7 +133,7 @@ func main() {
 
 			// Chama o método GetIndex do servidor para consultar o valor
 			var index int
-			client.Call("Server.GetIndex", []string{listName, value}, &index)
+			err = client.Call("Server.GetIndex", []string{listName, value}, &index)
 			if err != nil {
 				fmt.Println("Erro ao buscar item na lista: ", err)
 			} else {
