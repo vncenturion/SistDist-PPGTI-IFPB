@@ -15,7 +15,8 @@ func exibeMenu() {
 	fmt.Println("2. Remover último valor de uma lista")
 	fmt.Println("3. Listar todas as listas e seus valores")
 	fmt.Println("4. Exibir o tamanho de uma lista")
-	fmt.Println("5. Retornar indice de um item da lista")
+	fmt.Println("5. Retornar valor de um item da lista")
+	fmt.Println("6. Retornar indice de um item da lista")
 	fmt.Println("0. Sair")
 	fmt.Print("Opção: ")
 }
@@ -102,22 +103,41 @@ func main() {
 			}
 
 		case "5":
-			// Lê o nome da lista e o valor a ser adicionado
+			// Lê o nome da lista e o índice a ser consultado
 			fmt.Print("Digite o nome da lista: ")
 			scanner.Scan()
 			listName := scanner.Text()
 
-			fmt.Print("Digite o valor a ser adicionado: ")
+			fmt.Print("Digite o índice a ser consultado: ")
+			scanner.Scan()
+			index := scanner.Text()
+
+			// Chama o método Get do servidor para consultar o índice
+			var value int
+			client.Call("Server.Get", []string{listName, index}, &value)
+			if err != nil {
+				fmt.Println("Erro ao buscar índice na lista: ", err)
+			} else {
+				fmt.Printf("Valor do item buscado na lista %s: %d\n", listName, value)
+			}
+
+		case "6":
+			// Lê o nome da lista e o valor a ser consultado
+			fmt.Print("Digite o nome da lista: ")
+			scanner.Scan()
+			listName := scanner.Text()
+
+			fmt.Print("Digite o valor a ser consultado: ")
 			scanner.Scan()
 			value := scanner.Text()
 
-			// Chama o método Append do servidor para adicionar o valor na lista
+			// Chama o método GetIndex do servidor para consultar o valor
 			var index int
 			client.Call("Server.GetIndex", []string{listName, value}, &index)
 			if err != nil {
 				fmt.Println("Erro ao buscar item na lista: ", err)
 			} else {
-				fmt.Printf("Index do item buscado na lista %s: %d\n", listName, index)
+				fmt.Printf("Índice do item buscado na lista %s: %d\n", listName, index)
 			}
 
 		case "0":
